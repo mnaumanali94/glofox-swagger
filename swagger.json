@@ -1249,7 +1249,7 @@
             "required": true,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/CreateInteractionforaLeadMemberRequest"
+              "$ref": "#/definitions/CreateInteractionforaLead/MemberRequest"
             }
           },
           {
