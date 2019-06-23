@@ -1249,7 +1249,7 @@
             "required": true,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/CreateInteractionforaLead/MemberRequest"
+              "$ref": "#/definitions/CreateInteractionforaLeadMemberRequest"
             }
           },
           {
@@ -9753,8 +9753,8 @@
         "currency"
       ]
     },
-    "CreateInteractionforaLead/MemberRequest": {
-      "title": "CreateInteractionforaLead/MemberRequest",
+    "CreateInteractionforaLeadMemberRequest": {
+      "title": "CreateInteractionforaLeadMemberRequest",
       "example": {
         "user_id": "5b080fee399be700f20d9bf4",
         "type": "NOTE",
