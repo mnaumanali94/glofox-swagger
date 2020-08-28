@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0",
     "title": "Glofox Internal API",
-    "description": "# Introduction\nWhat does your API do?\n\n# Overview\nThings that the developers should know about\n\n# Authentication\nWhat is the preferred way of using the API?\n\n# Error Codes\nWhat errors and status codes can a user expect?\n\n# Rate limit\nIs there a limit to the number of requests an user can send?",
+    "description": "# Introduction Awesome\nWhat does your API do?\n\n# Overview\nThings that the developers should know about\n\n# Authentication\nWhat is the preferred way of using the API?\n\n# Error Codes\nWhat errors and status codes can a user expect?\n\n# Rate limit\nIs there a limit to the number of requests an user can send?",
     "contact": {}
   },
   "host": "example.com",
@@ -3006,7 +3006,7 @@
                       "booking_name": "Boxing Course",
                       "model": "courses",
                       "time_start": 1537585200,
-                      "duration": 780899.98333333328
+                      "duration": 780899.9833333333
                     },
                     "modified": 1542723254,
                     "created": 1542723254,
@@ -4373,7 +4373,7 @@
                     "model": "courses",
                     "model_id": "5b6c6a735e4b8a01953599e3",
                     "time_start": 1537585200,
-                    "duration": 780899.98333333328,
+                    "duration": 780899.9833333333,
                     "type": "booking",
                     "image_url": "https://cdn.glofox.com/local/cookiestudio/branches/570b795c778f3bbd138b4568/?v=1542723253"
                   },
@@ -10624,7 +10624,7 @@
               "booking_name": "Boxing Course",
               "model": "courses",
               "time_start": 1537585200,
-              "duration": 780899.98333333328
+              "duration": 780899.9833333333
             },
             "modified": 1542723254,
             "created": 1542723254,
@@ -10724,7 +10724,7 @@
           "booking_name": "Boxing Course",
           "model": "courses",
           "time_start": 1537585200,
-          "duration": 780899.98333333328
+          "duration": 780899.9833333333
         },
         "modified": 1542723254,
         "created": 1542723254,
@@ -10794,7 +10794,7 @@
         "booking_name": "Boxing Course",
         "model": "courses",
         "time_start": 1537585200,
-        "duration": 780899.98333333328
+        "duration": 780899.9833333333
       },
       "type": "object",
       "properties": {
@@ -14430,7 +14430,7 @@
             "model": "courses",
             "model_id": "5b6c6a735e4b8a01953599e3",
             "time_start": 1537585200,
-            "duration": 780899.98333333328,
+            "duration": 780899.9833333333,
             "type": "booking",
             "image_url": "https://cdn.glofox.com/local/cookiestudio/branches/570b795c778f3bbd138b4568/?v=1542723253"
           },
@@ -14506,7 +14506,7 @@
         "model": "courses",
         "model_id": "5b6c6a735e4b8a01953599e3",
         "time_start": 1537585200,
-        "duration": 780899.98333333328,
+        "duration": 780899.9833333333,
         "type": "booking",
         "image_url": "https://cdn.glofox.com/local/cookiestudio/branches/570b795c778f3bbd138b4568/?v=1542723253"
       },
