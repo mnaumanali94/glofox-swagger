@@ -1,0 +1,538 @@
+openapi: 3.0.0
+info:
+  title: KYC Document Upload
+  version: 0.0.1
+  contact:
+    name: ETFmatic Developers
+    url: developers.etfmatic.com
+    email: developers@etfmatic.com
+  description: |
+    A demonstration API to acquire KYC documents
+tags:
+  - name: KYC Documents
+    description: Manage your clients' KYC documents
+servers:
+  - url: 'https://{domain}:{port}'
+    description: The local API server
+    variables:
+      domain:
+        default: localhost
+        description: api domain
+      port:
+        enum:
+          - '8092'
+        default: '8092'
+        description: port to connect on
+security:
+  - API_Key_1: []
+paths:
+  '/clients/{clientId}/kyc-documents':
+    parameters:
+      - $ref: '#/components/parameters/PathParam_ClientId'
+    post:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Create a new document.
+      description: Create a KYC document
+      operationId: upload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    fileData:
+                      type: string
+                      format: binary
+                      description: The binary encoded document
+                - $ref: '#/components/schemas/documentCommon'
+                - oneOf:
+                    - $ref: '#/components/schemas/documentAddress'
+                    - $ref: '#/components/schemas/documentIdentity'
+                  description: Extended document metadata
+            encoding:
+              document:
+                contentType: 'image/png, image/jpeg, application/pdf, application/zip'
+                headers:
+                  X-Rate-Limit-Limit:
+                    description: |
+                      The number of allowed requests in the current period
+                    schema:
+                      type: integer
+            examples:
+              Id Document:
+                value:
+                  fileData: string
+                  documentType: Identity Documment
+                  documentId: 25166ba8-43b2-474c-b676-a72515fab2bd
+                  createdOn: '2020-05-30T09:30:10Z'
+                  updatedOn: '2020-05-30T09:30:10Z'
+                  version: 1
+                  issuedOn: '2020-10-10'
+                  title: John Doe Passport
+                  description: Certified copy of John Doe's passport
+                  issuedBy: ES
+                  documentNumber: X-12345678-R
+                  expiresOn: '2030-10-10'
+                  side: FRONT
+              Proof-Of-Address:
+                value:
+                  fileData: string
+                  documentType: Identity Documment
+                  documentId: 25166ba8-43b2-474c-b676-a72515fab2bd
+                  createdOn: '2020-05-30T09:30:10Z'
+                  updatedOn: '2020-05-30T09:30:10Z'
+                  version: 1
+                  issuedOn: '2020-10-10'
+                  title: John Doe Passport
+                  description: 'Bank statement showing John Doe''s address,'
+                  issuedBy: 'BBVA,'
+                  proofType: BANK_STATEMENT
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Fetch a list of KYC documents
+      operationId: getClientsDocuments
+      parameters:
+        - $ref: '#/components/parameters/QueryParam_DocumentType'
+        - $ref: '#/components/parameters/QueryParam_CreatedStartDate'
+        - $ref: '#/components/parameters/QueryParam_CreatedEndDate'
+      responses:
+        '200':
+          description: Get the summary view of a client's kyc documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        documentType:
+                          type: string
+                          readOnly: true
+                          description: |
+                            The type of KYC document your client submitted.
+                          example: Identity Documment
+                        documentId:
+                          type: string
+                          readOnly: true
+                          description: The document's unique identifier
+                          example: 25166ba8-43b2-474c-b676-a72515fab2bd
+                        createdOn:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                          description: |
+                            The date on which the document was added to the repository
+                          example: '2020-05-30T09:30:10Z'
+                        version:
+                          type: number
+                          format: integer
+                          readOnly: true
+                          description: The document version
+                          example: 1
+                        issuedOn:
+                          type: string
+                          format: date
+                          description: |
+                            The date on which the authority issued the document
+                          example: '2020-10-10'
+                        title:
+                          type: string
+                          description: The name or title of the document
+                          example: John Doe Passport
+                        links:
+                          type: array
+                          items:
+                            $ref: ./common/models/link.v1.yaml
+                  links:
+                    type: array
+                    items:
+                      $ref: ./common/models/link.v1.yaml
+      description: |
+        This method provides you with searchable access to all documents uploaded for a client.
+  '/clients/{clientId}/kyc-documents/id-document':
+    parameters:
+      - $ref: '#/components/parameters/PathParam_ClientId'
+    post:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Create a new document.
+      description: Create a KYC document
+      operationId: uploadIdDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    fileData:
+                      type: string
+                      format: binary
+                      description: The binary encoded document
+                - $ref: '#/components/schemas/documentCommon'
+                - $ref: '#/components/schemas/documentIdentity'
+            encoding:
+              document:
+                contentType: 'image/png, image/jpeg, application/pdf, application/zip'
+                headers:
+                  X-Rate-Limit-Limit:
+                    description: |
+                      The number of allowed requests in the current period
+                    schema:
+                      type: integer
+            examples:
+              Id Document:
+                value:
+                  fileData: string
+                  documentType: Identity Documment
+                  documentId: 25166ba8-43b2-474c-b676-a72515fab2bd
+                  createdOn: '2020-05-30T09:30:10Z'
+                  updatedOn: '2020-05-30T09:30:10Z'
+                  version: 1
+                  issuedOn: '2020-10-10'
+                  title: John Doe Passport
+                  description: Certified copy of John Doe's passport
+                  issuedBy: ES
+                  documentNumber: X-12345678-R
+                  expiresOn: '2030-10-10'
+                  side: FRONT
+      responses:
+        '200':
+          description: OK
+  '/clients/{clientId}/kyc-documents/proof-of-address':
+    parameters:
+      - $ref: '#/components/parameters/PathParam_ClientId'
+    post:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Create a new document.
+      description: Create a KYC document
+      operationId: uploadProofOfAddress
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    fileData:
+                      type: string
+                      format: binary
+                      description: The binary encoded document
+                - $ref: '#/components/schemas/documentCommon'
+                - $ref: '#/components/schemas/documentAddress'
+            encoding:
+              document:
+                contentType: 'image/png, image/jpeg, application/pdf, application/zip'
+                headers:
+                  X-Rate-Limit-Limit:
+                    description: |
+                      The number of allowed requests in the current period
+                    schema:
+                      type: integer
+            examples:
+              Proof-Of-Address:
+                value:
+                  fileData: string
+                  documentType: Identity Documment
+                  documentId: 25166ba8-43b2-474c-b676-a72515fab2bd
+                  createdOn: '2020-05-30T09:30:10Z'
+                  updatedOn: '2020-05-30T09:30:10Z'
+                  version: 1
+                  issuedOn: '2020-10-10'
+                  title: John Doe Passport
+                  description: Bank statement showing John Doe's address
+                  issuedBy: BBVA
+                  proofType: BANK_STATEMENT
+      responses:
+        '200':
+          description: OK
+  '/clients/{clientId}/kyc-documents/kyc-report':
+    parameters:
+      - $ref: '#/components/parameters/PathParam_ClientId'
+    post:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Create a new document.
+      description: Create a KYC document
+      operationId: uploadKYCReport
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    fileData:
+                      type: string
+                      format: binary
+                      description: The binary encoded document
+                - $ref: '#/components/schemas/documentCommon'
+            encoding:
+              document:
+                contentType: 'image/png, image/jpeg, application/pdf, application/zip'
+                headers:
+                  X-Rate-Limit-Limit:
+                    description: |
+                      The number of allowed requests in the current period
+                    schema:
+                      type: integer
+            examples:
+              KYC Report:
+                value:
+                  fileData: string
+                  documentType: KYC Report
+                  documentId: 25166ba8-43b2-474c-b676-a72515fab2bd
+                  createdOn: '2020-05-30T09:30:10Z'
+                  updatedOn: '2020-05-30T09:30:10Z'
+                  version: 1
+                  issuedOn: '2020-10-10'
+                  title: ITSME KYC Report
+                  description: Identity check report from ITSME
+                  issuedBy: ITSME
+      responses:
+        '200':
+          description: OK
+  '/clients/{clientId}/kyc-documents/{documentId}':
+    parameters:
+      - $ref: '#/components/parameters/PathParam_ClientId'
+      - $ref: '#/components/parameters/PathParam_documentId'
+    get:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Fetch a specified supporting KYC document
+      description: |
+        Use the document's unique key to return the specified KYC document.
+      operationId: getKYCDocument
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  document:
+                    type: string
+                    format: binary
+  '/clients/{clientId}/kyc-documents/{documentId}/metadata':
+    parameters:
+      - $ref: '#/components/parameters/PathParam_ClientId'
+      - $ref: '#/components/parameters/PathParam_documentId'
+    get:
+      tags:
+        - KYC Documents
+      security:
+        - API_Key_1: []
+      summary: Fetch the metadata for a specified supporting KYC document
+      description: |
+        Use the document's unique key to return the specified document's metadata.
+      operationId: getDocumentMetadata
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/documentCommon'
+                  - oneOf:
+                      - $ref: '#/components/schemas/documentIdentity'
+                      - $ref: '#/components/schemas/documentAddress'
+components:
+  parameters:
+    PathParam_ClientId:
+      name: clientId
+      in: path
+      description: The client's unique identifier (key)
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: T6T4ZZZ9XTFMN
+    PathParam_documentId:
+      name: documentId
+      in: path
+      description: The client's unique identifier (key)
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: 25166ba8-43b2-474c-b676-a72515fab2bd
+    QueryParam_DocumentType:
+      name: documentType
+      in: query
+      description: The type of KYC document
+      required: false
+      allowEmptyValue: true
+      explode: false
+      schema:
+        type: string
+        enum:
+          - IDENTITY
+          - PROOF_OF_ADDRESS
+          - KYC_REPORT
+      example: IDENTITY
+    QueryParam_CreatedStartDate:
+      name: createdOnStart
+      in: query
+      description: Limit to entries created after this date (inclusive)
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        format: date
+      example: '2019-01-01'
+    QueryParam_CreatedEndDate:
+      name: createdOnEnd
+      in: query
+      description: Limit to entries created before this date (inclusive)
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        format: date
+      example: '2019-12-31'
+  schemas:
+    documentCommon:
+      type: object
+      required:
+        - issuedBy
+        - issuedOn
+        - title
+      properties:
+        documentType:
+          type: string
+          readOnly: true
+          description: The type of KYC document your client submitted.
+          example: Identity Documment
+        documentId:
+          type: string
+          readOnly: true
+          description: The document's unique identifier
+          example: 25166ba8-43b2-474c-b676-a72515fab2bd
+        createdOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: |
+            The date on which the document was created in the repository
+          example: '2020-05-30T09:30:10Z'
+        updatedOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date on which the document was last updated
+          example: '2020-05-30T09:30:10Z'
+        version:
+          type: number
+          format: integer
+          readOnly: true
+          description: The document version
+          example: 1
+        issuedOn:
+          type: string
+          format: date
+          description: The date on which the authority issued the document
+          example: '2020-10-10'
+        issuedBy:
+          type: string
+          description: The name of the authority or organisation that issued the document
+          example: BBVA
+        title:
+          type: string
+          description: The name or title of the document
+          example: John Doe Passport
+        description:
+          type: string
+          description: A short description of the document
+          example: Certified copy of John Doe's passport
+      x-examples:
+        Common:
+          documentType: Identity Documment
+          documentId: 25166ba8-43b2-474c-b676-a72515fab2bd
+          createdOn: '2020-05-30T09:30:10Z'
+          updatedOn: '2020-05-30T09:30:10Z'
+          version: 1
+          issuedOn: '2020-10-10'
+          title: John Doe Passport
+          description: Certified copy of John Doe's passport
+      description: Common document metadata
+    documentAddress:
+      type: object
+      required:
+        - proofType
+      properties:
+        proofType:
+          type: string
+          description: The type of proof-of-address document you're uploading.
+          enum:
+            - BANK_STATEMENT
+            - OTHER
+          example: BANK_STATEMENT
+      description: Proof-of-address metadata
+      x-examples:
+        Proof-of-Address:
+          proofType: BANK_STATEMENT
+    documentIdentity:
+      type: object
+      required:
+        - expiresOn
+        - side
+        - documentNumber
+      properties:
+        documentNumber:
+          type: string
+          description: The identification document number
+          example: X-12345678-R
+        expiresOn:
+          type: string
+          format: date
+          description: The date on which the document expires
+          example: '2025-01-27'
+        side:
+          type: string
+          description: The document side captured in the scan
+          enum:
+            - FRONT
+            - BACK
+            - BOTH
+          example: FRONT
+      x-examples:
+        Id document metadata:
+          documentNumber: X-12345678-R
+          expiresOn: '2025-01-27'
+          side: FRONT
+  securitySchemes:
+    API_Key_1:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}

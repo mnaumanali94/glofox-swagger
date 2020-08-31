@@ -1,0 +1,260 @@
+swagger: '2.0'
+info:
+  title: adasdasd
+  version: '1.0'
+host: 'localhost:3000'
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /orders/wallet-reserve:
+    post:
+      description: |
+        In this step, users create a wallet reservation order, by providing details about their order, partners also can pass some details like their `API_KEY` etc.
+
+        For the sake of simplification, the arguments are grouped into three categories, as follows:
+
+        <!--
+        type: tab
+        title: Order parameters
+        -->
+        #### 1. Order parameters.
+
+        A user needs to pass the details of their intended order, like the type and amount of cryptocurrency they'd like to buy, the fiat currency they'd like use to pay for the order.
+
+        The following table contains a full list of order arguments.
+
+        | Argument | Description | Type | Required |
+        |----|----|----|
+        | fiatCurrency | Fiat currency which the users wants to buy/sell | `string` | `true` |
+        | cryptoCurrency | Crypto currency which the users wants to sell/buy | `string` | `true` |
+        | fiatAmount | Fiat amount that is required to buy/sell | `number` |  `true`
+        | cryptoAmount | Crypto amount that is required to sell/buy | `number` | `false` |
+        | paymentMethod | Payment method id, ex: `gbp_bank_transfer` | `string` | `true` |
+        | walletAddress | Users wallet address  | `string` | `true`
+        | addressAdditionalData | address additional data like memo Id | `string` | `false` |
+        | network | Crypto network id. Example `BEP2`, `ERC-20` | `string` | `false` |
+        | quoteId | Quote ID, Is gotten from [/currencies/price](1.swagger.yaml/paths/~1currencies~1price/get) endpoint | `string` | `false` |
+        | isBuyOrSell | Is `BUY` or `SELL` | `string` | `true` |
+
+
+
+        <!--
+        type: tab
+        title: Partner parameters
+        -->
+        #### 2. Partner parameters
+
+        Partners can use these arguments depends on their needs, for example, the `redirectURL` where a partner can redirect their users after completing an order.
+
+        >  The most important argument is the `partnerApiKey`, this is the connection between a partner and their users
+
+        The following table contains a full list of partner arguments.
+
+        | Argument | Description | Type | Required |
+        | ----- | ---- | ------ | -------- |
+        | partnerApiKey | The partner API KEY to send the co-brand email | `string` | `false` |
+        | partnerAPISecret | enter the partner API SECRET to complete the KYC on behalf of the user | `string` | `false` |
+        | partnerOrderId | Partner order Id | `string` | `false` |
+        | partnerCustomerId | Partner customer Id | `string` | `false` |
+        | redirectURL | A URL to redirect users once they complete an order  | `string` | `false` |
+
+        <!--
+        type: tab
+        title: User parameters
+        -->
+        #### 3. User parameters.
+
+        Here, User basic details could be passed, these details will be auto filled for them automatically in the [KYC forms](1.swagger.yaml/paths/~1orders~1forms/get)
+
+        The following table contains a full list of order arguments.
+
+
+        | Argument | Description | Type | Required |
+        | ----- | ---- | ------ | -------- |
+        | email | enter the email address | `string` | `false` |
+        | first_name | enter your first_name | `string` | `false` |
+        | last_name | enter your last_name | `string` | `false` |
+        | dob | enter your dob DD-MM-YYYY | `string` | `false` |
+        | mobileNumber | enter your mobileNumber | `string` | `false` |
+        | addressLine1 | enter your address1 | `string` | `false` |
+        | addressLine2 | enter your addressLine2 | `string` | `false` |
+        | state | enter your state | `string` | `false` |
+        | city | enter your city | `string` | `false` |
+        | postCode | enter your postCode | `string` | `false` |
+        | country | enter your country | `string` | `false` |
+
+        <!--
+        type: tab-end
+        -->
+
+        The provided arguments in this resource will determine the user KYC and Order Forms, Here are two examples.
+        1. If paymentMethod is `credit_debit_card` [Order forms](1.swagger.yaml/paths/~1orders~1forms/get) will contain a Billing address form.
+        2. If paymentMethod is `gbp_bank_transfer` [Order forms](1.swagger.yaml/paths/~1orders~1forms/get) will contain a UK Bank form.
+      tags:
+        - orders
+      summary: 1. Create a new wallet reservation
+      operationId: orders.createOrderReservation
+      parameters:
+        - name: Content-Type
+          in: header
+          default: application/x-www-form-urlencoded
+          required: true
+          type: string
+        - name: fiatCurrency
+          in: formData
+          description: Fiat currency which the users wants to buy/sell
+          required: true
+          type: string
+        - name: cryptoCurrency
+          in: formData
+          description: Crypto currency which the users wants to sell/buy
+          required: true
+          type: string
+        - name: fiatAmount
+          in: formData
+          description: Fiat amount that is required to buy/sell
+          required: true
+          type: number
+          format: double
+        - name: cryptoAmount
+          in: formData
+          description: Crypto amount that is required to sell/buy
+          required: false
+          type: number
+          format: double
+        - name: paymentMethod
+          in: formData
+          description: 'Payment method id, ex: gbp_bank_transfer'
+          required: true
+          type: string
+        - name: walletAddress
+          in: formData
+          description: Your wallet address
+          required: true
+          type: string
+        - name: addressAdditionalData
+          in: formData
+          description: address additional data like memo id
+          required: false
+          type: string
+        - name: network
+          in: formData
+          description: 'Crypto network id. Example BEP2, ERC-20'
+          required: false
+          type: string
+        - name: quoteId
+          in: formData
+          description: Quote ID
+          required: false
+          type: string
+        - name: isBuyOrSell
+          in: formData
+          description: Is BUY or SELL
+          required: true
+          type: string
+        - name: partnerApiKey
+          in: formData
+          description: enter the partner API KEY to send the co-brand email
+          required: false
+          type: string
+        - name: partnerAPISecret
+          in: formData
+          description: enter the partner API SECRET to complete the KYC on behalf of the user
+          required: false
+          type: string
+        - name: partnerOrderId
+          in: formData
+          description: Partner order Id
+          required: false
+          type: string
+        - name: partnerCustomerId
+          in: formData
+          description: Partner customer Id
+          required: false
+          type: string
+        - name: redirectURL
+          in: formData
+          description: Redirect URL
+          required: false
+          type: string
+        - name: email
+          in: formData
+          description: enter the email address
+          required: false
+          type: string
+        - name: first_name
+          in: formData
+          description: enter your first_name
+          required: false
+          type: string
+        - name: last_name
+          in: formData
+          description: enter your last_name
+          required: false
+          type: string
+        - name: dob
+          in: formData
+          description: enter your dob DD-MM-YYYY
+          required: false
+          type: string
+        - name: mobileNumber
+          in: formData
+          description: enter your mobileNumber
+          required: false
+          type: string
+        - name: addressLine1
+          in: formData
+          description: enter your address1
+          required: false
+          type: string
+        - name: addressLine2
+          in: formData
+          description: enter your addressLine2
+          required: false
+          type: string
+        - name: state
+          in: formData
+          description: enter your state
+          required: false
+          type: string
+        - name: city
+          in: formData
+          description: enter your city
+          required: false
+          type: string
+        - name: postCode
+          in: formData
+          description: enter your postCode
+          required: false
+          type: string
+        - name: country
+          in: formData
+          description: enter your country
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              response:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                    description: Wallet reservation id
+            required:
+              - response
+          examples:
+            example-1:
+              response:
+                id: c1040db0-2c04-4c9f-9567-2d70aff7445e
+      deprecated: false
+definitions: {}
