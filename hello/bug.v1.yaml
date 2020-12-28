@@ -10,7 +10,7 @@ produces:
 consumes:
   - application/json
 paths:
-  /orders/wallet-reserve:
+  /orders/wallet-reserve1:
     post:
       description: |
         In this step, users create a wallet reservation order, by providing details about their order, partners also can pass some details like their `API_KEY` etc.
@@ -257,4 +257,5 @@ paths:
               response:
                 id: c1040db0-2c04-4c9f-9567-2d70aff7445e
       deprecated: false
+    parameters: []
 definitions: {}
