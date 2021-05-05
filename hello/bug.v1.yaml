@@ -10,7 +10,7 @@ produces:
 consumes:
   - application/json
 paths:
-  /orders/wallet-reserve:
+  /orders/wallet-reserve:ada
     post:
       description: |
         In this step, users create a wallet reservation order, by providing details about their order, partners also can pass some details like their `API_KEY` etc.
@@ -240,21 +240,17 @@ paths:
         '200':
           description: Request was successful
           schema:
-            type: object
-            properties:
-              response:
-                type: object
-                required:
-                  - id
-                properties:
-                  id:
-                    type: string
-                    description: Wallet reservation id
-            required:
-              - response
+            $ref: '#/definitions/Test'
           examples:
             example-1:
               response:
                 id: c1040db0-2c04-4c9f-9567-2d70aff7445e
       deprecated: false
-definitions: {}
+definitions:
+  Test:
+    title: Test
+    type: object
+    properties:
+      id:
+        type: string
+    x-internal: true
