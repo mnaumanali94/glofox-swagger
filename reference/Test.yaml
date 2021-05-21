@@ -179,8 +179,8 @@ components:
         - email
         - emailVerified
   securitySchemes:
-    APIKey:
+    basicAuth:     # <-- arbitrary name for the security scheme
       type: http
       scheme: basic
 security:
-  - APIKey: []
+  - basicAuth: [] 
